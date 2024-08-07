@@ -3,6 +3,8 @@
 import * as React from "react"
 import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import DP from '@/components/cat.jpg'
 
 
 import { cn } from "@/lib/utils"
@@ -15,6 +17,8 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
+
+
 import { List } from "@radix-ui/react-navigation-menu"
 
 // const components: { title: string; href: string; description: string }[] = [
@@ -58,6 +62,7 @@ import { List } from "@radix-ui/react-navigation-menu"
 export default function Navbar() {
   return (
     <div className="fixed top-10 inset-x-0  max-w-screen-xl mx-auto z-50">
+      <div className="flex justify-between items-center">
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
@@ -100,11 +105,18 @@ export default function Navbar() {
             </Link>
 
         </NavigationMenuItem>
-
+       
         
         
       </NavigationMenuList>
     </NavigationMenu>
+    <div className="">
+        <Avatar>
+          <AvatarImage src='/cat.jpg' alt="cat"/>
+          <AvatarFallback>S</AvatarFallback>
+        </Avatar>
+        </div>
+    </div>
     </div>
   )
 }
