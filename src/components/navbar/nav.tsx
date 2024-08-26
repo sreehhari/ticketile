@@ -5,6 +5,9 @@ import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import DP from '@/components/cat.jpg'
+import { Button } from "@/components/ui/button"
+import UserLogo from "../avatar/UserLogo"
+import SignUp from "../signupButton/signup"
 
 
 import { cn } from "@/lib/utils"
@@ -111,11 +114,12 @@ export default function Navbar() {
       </NavigationMenuList>
     </NavigationMenu>
     <div className="">
-        <Avatar>
-          <AvatarImage src='/cat.jpg' alt="cat"/>
-          <AvatarFallback>S</AvatarFallback>
-        </Avatar>
+       <UserLogo/>
         </div>
+      <div>
+        <SignUp/>
+      </div>
+    
     </div>
     </div>
   )
