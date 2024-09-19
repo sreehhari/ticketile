@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import DP from '@/components/cat.jpg'
 import { Button } from "@/components/ui/button"
 import UserLogo from "../avatar/UserLogo"
-import SignUp from "../signupButton/signup"
+// import SignUp from "../signupButton/signup"
 
 
 import { cn } from "@/lib/utils"
@@ -23,6 +23,7 @@ import {
 
 
 import { List } from "@radix-ui/react-navigation-menu"
+import { signIn, signOut } from "next-auth/react"
 
 // const components: { title: string; href: string; description: string }[] = [
 //   {
@@ -117,7 +118,10 @@ export default function Navbar() {
        <UserLogo/>
         </div>
       <div>
-        <SignUp/>
+      <button onClick={()=>signIn()}>SignIn</button>
+      </div>
+      <div>
+        <button onClick={()=>signOut()}>SignOut</button>
       </div>
     
     </div>
