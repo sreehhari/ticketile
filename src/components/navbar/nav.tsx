@@ -23,7 +23,7 @@ import {
 
 
 import { List } from "@radix-ui/react-navigation-menu"
-import { signIn, signOut } from "next-auth/react"
+import { signIn, signOut, useSession } from "next-auth/react"
 
 // const components: { title: string; href: string; description: string }[] = [
 //   {
@@ -64,6 +64,7 @@ import { signIn, signOut } from "next-auth/react"
 // ]
 
 export default function Navbar() {
+  const session = useSession();
   return (
     <div className="fixed top-10 inset-x-0  max-w-screen-xl mx-auto z-50">
       <div className="flex justify-between items-center">
