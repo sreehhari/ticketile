@@ -8,7 +8,7 @@ import DP from '@/components/cat.jpg'
 import { Button } from "@/components/ui/button"
 import UserLogo from "../avatar/UserLogo"
 // import SignUp from "../signupButton/signup"
-
+import { useRouter } from "next/navigation"
 
 import { cn } from "@/lib/utils"
 import {
@@ -64,6 +64,7 @@ import { signIn, signOut, useSession } from "next-auth/react"
 // ]
 
 export default function Navbar() {
+  const router = useRouter();
   const session = useSession();
   return (
     <div className="fixed top-10 inset-x-0  max-w-screen-xl mx-auto z-50">
@@ -119,7 +120,8 @@ export default function Navbar() {
        <UserLogo/>
         </div>
       <div>
-      <button onClick={()=>signIn()}>SignIn</button>
+      {/* <button onClick={()=>signIn()}>SignIn</button> */}
+      <button onClick={()=>router.push('/signUp')}>Sign Up</button>
       </div>
       <div>
         <button onClick={()=>signOut()}>SignOut</button>

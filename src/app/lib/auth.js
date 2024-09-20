@@ -1,4 +1,4 @@
-import { CredentialsProvider } from "next-auth/providers/credentials";
+import  CredentialsProvider  from "next-auth/providers/credentials";
 import { PrismaClient } from "@prisma/client";
 import { cookies } from "next/headers";
 import { Providers } from "../providers";
