@@ -19,9 +19,59 @@ import {
   } from "@/components/ui/select";
   import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 export default function SignUpPage(){
-    type RoleType = 'owner' | 'consumer' | '';
-const[role,setRole]=useState<RoleType>("");
+    const [formData,setFormData]=useState({
+        email:"",
+        password:"",
+        name:"",
+        role:"CONSUMER",
+        theaterName:"",
+    });
+    const[error,setError]=useState<String | null>(null);
+    const router=useRouter();
+   
+    const handleinputchange =(e:React.ChangeEvent<HTMLInputElement>)=>{
+        setFormData({...formData,[e.target.name]:e.target.value})
+    };
+
+    const handleRoleChange = (value:string)=>{
+        setFormData({
+            ...formData,
+            role:value,
+        });
+    };
+
+    
+    const handleSignup=async(e:React.FormEvent)=>{
+        e.preventDefault();
+        setError(null);
+
+        try{
+            const response = await fetch("/api/auth/signup",{
+                method:"POST",
+                headers:{
+                    "Content-type":"application/json",
+                },
+                body:JSON.stringify(formData)
+            });
+
+
+            const result = await response.json();
+            if(response.ok){
+                //here we write the redirect logic .. like redirecting to homepage after a successful signup
+                router.push("/page");
+            }else{
+                setError(result.error || "signup failed");
+            }
+        }
+        catch (err){
+            setError("an error has occurred while signing up")
+        }
+
+    };
+//     type RoleType = 'owner' | 'consumer' | '';
+// const[role,setRole]=useState<RoleType>("");
 
 
     return (
@@ -32,15 +82,19 @@ const[role,setRole]=useState<RoleType>("");
         <CardTitle>Sign Up</CardTitle>
       </CardHeader>
       <CardContent>
-        <form>
+        <form onSubmit={handleSignup}>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="username">Username</Label>
-              <Input id="username" placeholder="example@gmail.com" />
+              <Label htmlFor="email">Username</Label>
+              <Input name="email" placeholder="example@gmail.com" type="email" value={formData.email} onChange={handleinputchange} required/>
+              <Label htmlFor="password">Passowrd</Label>
+              <Input name="password" placeholder="*******" type="password" value={formData.password} onChange={handleinputchange} required></Input>
+              <Label htmlFor="name">Name</Label>
+              <Input name="name" placeholder="enter name" type="text" value={formData.name} onChange={handleinputchange} required></Input>              
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="role">Role</Label>
-              <Select onValueChange={(value)=>setRole(value as RoleType)}>
+              <Select name="role" onValueChange={handleRoleChange} value={formData.role}>
                 <SelectTrigger id="role">
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
@@ -50,13 +104,15 @@ const[role,setRole]=useState<RoleType>("");
                  
                 </SelectContent>
               </Select>
-              {role==='owner'&&(
+              {formData.role==='owner'&&(
                 <div>
                     <Label htmlFor="theatername">Theater Name</Label>
                     <Input id="theatername"
                      name="theatername" 
                      type="text"
                       placeholder="Enter theater name"
+                      value={formData.theaterName}
+                      onChange={handleinputchange}
                       required></Input>
                 </div>
               )}
@@ -65,9 +121,8 @@ const[role,setRole]=useState<RoleType>("");
           </div>
         </form>
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button>Signup</Button>
+      <CardFooter className="flex justify-end">
+        <Button type="submit" onClick={handleSignup}>Signup</Button>
       </CardFooter>
     </Card>
         
