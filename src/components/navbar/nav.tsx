@@ -5,7 +5,10 @@ import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import DP from '@/components/cat.jpg'
-
+import { Button } from "@/components/ui/button"
+import UserLogo from "../avatar/UserLogo"
+// import SignUp from "../signupButton/signup"
+import { useRouter } from "next/navigation"
 
 import { cn } from "@/lib/utils"
 import {
@@ -20,6 +23,7 @@ import {
 
 
 import { List } from "@radix-ui/react-navigation-menu"
+import { signIn, signOut, useSession } from "next-auth/react"
 
 // const components: { title: string; href: string; description: string }[] = [
 //   {
@@ -60,6 +64,8 @@ import { List } from "@radix-ui/react-navigation-menu"
 // ]
 
 export default function Navbar() {
+  const router = useRouter();
+  const session = useSession();
   return (
     <div className="fixed top-10 inset-x-0  max-w-screen-xl mx-auto z-50">
       <div className="flex justify-between items-center">
@@ -111,11 +117,16 @@ export default function Navbar() {
       </NavigationMenuList>
     </NavigationMenu>
     <div className="">
-        <Avatar>
-          <AvatarImage src='/cat.jpg' alt="cat"/>
-          <AvatarFallback>S</AvatarFallback>
-        </Avatar>
+       <UserLogo/>
         </div>
+      <div>
+      {/* <button onClick={()=>signIn()}>SignIn</button> */}
+      <button onClick={()=>router.push('/signUp')}>Sign Up</button>
+      </div>
+      <div>
+        <button onClick={()=>signOut()}>SignOut</button>
+      </div>
+    
     </div>
     </div>
   )
