@@ -31,8 +31,8 @@ export default function SignUpPage(){
     const[error,setError]=useState<String | null>(null);
     const router=useRouter();
    
-    const handleinputchange =(e:React.ChangeEvent<HTMLInputElement>)=>{
-        setFormData({...formData,[e.target.name]:e.target.value})
+    const handleinputchange =(e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>{
+        setFormData({...formData,[e.target.name]:e.target.value,})
     };
 
     const handleRoleChange = (value:string)=>{
@@ -106,9 +106,9 @@ export default function SignUpPage(){
               </Select>
               {formData.role==='owner'&&(
                 <div>
-                    <Label htmlFor="theatername">Theater Name</Label>
-                    <Input id="theatername"
-                     name="theatername" 
+                    <Label htmlFor="theaterName">Theater Name</Label>
+                    <Input id="theaterName"
+                     name="theaterName" 
                      type="text"
                       placeholder="Enter theater name"
                       value={formData.theaterName}
