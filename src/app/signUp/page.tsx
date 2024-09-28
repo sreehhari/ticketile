@@ -60,7 +60,7 @@ export default function SignUpPage(){
             const result = await response.json();
             if(response.ok){
                 //here we write the redirect logic .. like redirecting to homepage after a successful signup
-                router.push("/page");
+                router.push("/");//[err]make this route to the homepage
             }else{
                 setError(result.error || "signup failed");
             }

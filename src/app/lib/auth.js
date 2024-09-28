@@ -1,7 +1,7 @@
 import  CredentialsProvider  from "next-auth/providers/credentials";
 import { PrismaClient } from "@prisma/client";
-import { cookies } from "next/headers";
-import { Providers } from "../providers";
+// import { cookies } from "next/headers";
+// import { Providers } from "../providers";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -30,7 +30,8 @@ export const NEXT_AUTH_CONFIG = {
                 if(!isPasswordValid){
                     throw new Error("invalid password");
                 }
-                //if everything is good then we return the user aka logs him in
+                //if everything is good then we return the user details to the jwt token section where a token with these deatais is made for the user
+                
                 return{
                     id:user.id,
                     name:user.name,
