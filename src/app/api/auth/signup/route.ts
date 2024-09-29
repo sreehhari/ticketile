@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 export async function POST(req:NextRequest) {
-    const {email, password, role, theaterName,name}=await req.json();
+    const {email, password, role, theaterName,name,location}=await req.json();
 
     //cheching if the user already exists
     const existingUser = await prisma.user.findUnique({
@@ -42,6 +42,7 @@ export async function POST(req:NextRequest) {
                         //@ts-ignore
                         create:{
                             name:theaterName,
+                            location:location,
                         },
                     },
                 },
@@ -57,7 +58,8 @@ export async function POST(req:NextRequest) {
                     email:email,
                     name:name,
                     password:hashedPassword,
-                    role:"CONSUMER"
+                    role:"CONSUMER",
+
                 },
             });
             return NextResponse.json(consumer,{status:201});

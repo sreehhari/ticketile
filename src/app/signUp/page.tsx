@@ -27,6 +27,7 @@ export default function SignUpPage(){
         name:"",
         role:"CONSUMER",
         theaterName:"",
+        location:"",
     });
     const[error,setError]=useState<String | null>(null);
     const router=useRouter();
@@ -105,6 +106,7 @@ export default function SignUpPage(){
                 </SelectContent>
               </Select>
               {formData.role==='owner'&&(
+                <>
                 <div>
                     <Label htmlFor="theaterName">Theater Name</Label>
                     <Input id="theaterName"
@@ -115,6 +117,17 @@ export default function SignUpPage(){
                       onChange={handleinputchange}
                       required></Input>
                 </div>
+                <div>
+                  <Label htmlFor="location">Location</Label>
+                  <Input id="location"
+                  name="location"
+                  type="text"
+                  placeholder="enter the theater location"
+                  value={formData.location}
+                  onChange={handleinputchange}
+                  required></Input>
+                </div>
+                </>
               )}
 
             </div>
