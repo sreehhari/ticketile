@@ -20,7 +20,9 @@ export const NEXT_AUTH_CONFIG = {
                     return null;
                 }
                 const user = await prisma.user.findUnique({
-                    where :{email:credentials.email},
+                    where :{email:credentials.email,
+                        password:credentials.password
+                    },
                 });
                 if(!user){
                     throw new Error("no user found with that email check your email and try again");
