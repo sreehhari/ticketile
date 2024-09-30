@@ -6,7 +6,9 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-  } from "@/components/ui/card"
+  } from "@/components/ui/card";
+
+import Link from "next/link";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
@@ -27,6 +29,7 @@ export default function SignUpPage(){
         name:"",
         role:"CONSUMER",
         theaterName:"",
+        location:"",
     });
     const[error,setError]=useState<String | null>(null);
     const router=useRouter();
@@ -60,7 +63,7 @@ export default function SignUpPage(){
             const result = await response.json();
             if(response.ok){
                 //here we write the redirect logic .. like redirecting to homepage after a successful signup
-                router.push("/page");
+                router.push("/");//[err]make this route to the homepage
             }else{
                 setError(result.error || "signup failed");
             }
@@ -76,7 +79,7 @@ export default function SignUpPage(){
 
     return (
         <>
-        <div className="min-h-screen flex items-center justify-center">
+        <div className="min-h-screen flex flex-col items-center justify-center">
            <Card className="w-[350px]">
       <CardHeader>
         <CardTitle>Sign Up</CardTitle>
@@ -94,9 +97,9 @@ export default function SignUpPage(){
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="role">Role</Label>
-              <Select name="role" onValueChange={handleRoleChange} value={formData.role}>
+              <Select name="role" onValueChange={handleRoleChange} value={formData.role} >
                 <SelectTrigger id="role">
-                  <SelectValue placeholder="Select" />
+                  <SelectValue placeholder="Select role" />
                 </SelectTrigger>
                 <SelectContent position="popper">
                   <SelectItem value="owner">Theater owner</SelectItem>
@@ -105,6 +108,7 @@ export default function SignUpPage(){
                 </SelectContent>
               </Select>
               {formData.role==='owner'&&(
+                <>
                 <div>
                     <Label htmlFor="theaterName">Theater Name</Label>
                     <Input id="theaterName"
@@ -115,6 +119,17 @@ export default function SignUpPage(){
                       onChange={handleinputchange}
                       required></Input>
                 </div>
+                <div>
+                  <Label htmlFor="location">Location</Label>
+                  <Input id="location"
+                  name="location"
+                  type="text"
+                  placeholder="enter the theater location"
+                  value={formData.location}
+                  onChange={handleinputchange}
+                  required></Input>
+                </div>
+                </>
               )}
 
             </div>
@@ -125,6 +140,13 @@ export default function SignUpPage(){
         <Button type="submit" onClick={handleSignup}>Signup</Button>
       </CardFooter>
     </Card>
+    <div className="mt-3">
+    <p>
+          Already have an account?
+          <br />
+          <Link href="/signIn" prefetch={true} className="text-teal-400 ">SignIn</Link> here
+        </p>
+    </div>
         
     </div>
         </>
