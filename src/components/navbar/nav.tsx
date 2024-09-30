@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button"
 import UserLogo from "../avatar/UserLogo"
 // import SignUp from "../signupButton/signup"
 import { useRouter } from "next/navigation"
-
 import { cn } from "@/lib/utils"
 import {
   NavigationMenu,
@@ -24,6 +23,7 @@ import {
 
 import { List } from "@radix-ui/react-navigation-menu"
 import { signIn, signOut, useSession } from "next-auth/react"
+import { stringify } from "querystring"
 
 // const components: { title: string; href: string; description: string }[] = [
 //   {
@@ -65,9 +65,9 @@ import { signIn, signOut, useSession } from "next-auth/react"
 
 export default function Navbar() {
   const router = useRouter();
-  const session = useSession();
+  const {data:session} = useSession();
   return (
-    <div className="fixed top-10 inset-x-0  max-w-screen-xl mx-auto z-50">
+    <div className="fixed top-10 inset-x-0  max-w-screen-xl mx-auto z-50 ">
       <div className="flex justify-between items-center">
     <NavigationMenu>
       <NavigationMenuList>
@@ -106,10 +106,13 @@ export default function Navbar() {
         <Separator orientation="vertical"/>
 
         <NavigationMenuItem>
-        <Link href='/accounts'>
+        <Link href='/account'>
             Account
             </Link>
 
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <h3>{JSON.stringify(session?.user?.email)}</h3>
         </NavigationMenuItem>
        
         

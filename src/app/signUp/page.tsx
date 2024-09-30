@@ -22,6 +22,7 @@ import {
   import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 export default function SignUpPage(){
     const [formData,setFormData]=useState({
         email:"",
@@ -142,9 +143,14 @@ export default function SignUpPage(){
     </Card>
     <div className="mt-3">
     <p>
-          Already have an account?
+          Already have an account? signIn
           <br />
-          <Link href="/signIn" prefetch={true} className="text-teal-400 ">SignIn</Link> here
+          {/* <Link onClick={router.push(()=>signIn())} prefetch={true} className="text-teal-400 ">SignIn</Link> here */}
+          <a className="text-teal-400 cursor-pointer" onClick={(e)=>{
+            e.preventDefault();
+            signIn();
+          }}>here</a>
+          
         </p>
     </div>
         

@@ -19,9 +19,9 @@ export const NEXT_AUTH_CONFIG = {
                 if(!credentials){
                     return null;
                 }
+                const {username: email, password } = credentials;
                 const user = await prisma.user.findUnique({
-                    where :{email:credentials.email,
-                        password:credentials.password
+                    where :{email:email,
                     },
                 });
                 if(!user){
@@ -60,8 +60,5 @@ export const NEXT_AUTH_CONFIG = {
             return session;
         }
     },
-    pages:{
-        signIn:'/signIn',
-        error:'/error'
-    }   
+     
 };
