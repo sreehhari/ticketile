@@ -114,6 +114,9 @@ export default function Navbar() {
         <NavigationMenuItem>
           <h3>{JSON.stringify(session?.user?.email)}</h3>
         </NavigationMenuItem>
+        <NavigationMenuItem>
+          <Link href='/dashboard'>Dashboard</Link>
+        </NavigationMenuItem>
        
         
         
