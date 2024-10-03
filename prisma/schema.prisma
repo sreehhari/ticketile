@@ -30,13 +30,15 @@ model Theater {
   ownerId  Int
   owner    User           @relation(fields: [ownerId], references: [id])
   movies   MovieTheater[]
+  seats    Int            @default(90)
 }
 
 model Movie {
   id          Int            @id @default(autoincrement())
   title       String
   description String
-  releaseDate DateTime
+  showDate    DateTime
+  showtime    DateTime
   posterUrl   String?
   theaters    MovieTheater[]
   bookings    Booking[]

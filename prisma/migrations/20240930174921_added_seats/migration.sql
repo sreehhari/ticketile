@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Theater" ADD COLUMN     "seats" INTEGER NOT NULL DEFAULT 90;
