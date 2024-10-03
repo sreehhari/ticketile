@@ -19,7 +19,7 @@ import {
   } from "@/components/ui/select"
   import { addDays, format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react";
-import { useState } from "react"
+import { useActionState, useState } from "react"
  
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
@@ -30,7 +30,44 @@ import {
 } from "@/components/ui/popover";
 
 export default function Dashboard() {
-    const [date, setDate] = useState<Date>()
+  interface MovieDetails{
+    name:string;
+    date: Date | string;
+  }
+  const[error,setError]=useState<String | null>(null);
+
+    // const [date, setDate] = useState<Date>();
+    // const [movie,setMovie] = useState("");
+    const [movieDetails,setMovieDetails]=useState<MovieDetails>({
+      name:"",
+      date:""
+    })
+    const handleinputchange =(e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>{
+      setMovieDetails({...movieDetails,[e.target.name]:e.target.value,})
+  };
+    const handleDeploy=async(e:React.FormEvent)=>{
+      e.preventDefault();
+      setError(null);
+
+      try{
+        const response = await fetch("/api/dashboard",{
+          method:"POST",
+          headers:{
+            "Content-type":"application/json",
+
+          },
+          body:JSON.stringify(setMovieDetails)
+        });
+        const result = await response.json();
+        if(response.ok){
+          console.log("successfully added movie");
+        }else{
+          setError(result.error || 'adding movie failed')
+        }
+      }catch(err){
+        setError("an error has occurred while tryna add movie")
+      }
+    }
   return (
     <>
     <div className="min-h-screen flex flex-col items-center justify-center">
@@ -43,8 +80,9 @@ export default function Dashboard() {
         <form>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" placeholder="Name of your project" />
+              <Label htmlFor="movieDetails">Name</Label>
+              <Input name="name"  value={movieDetails.name} onChange={handleinputchange} placeholder="Name of the movie" />
+              
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="showtime">Showtime</Label>
@@ -65,17 +103,20 @@ export default function Dashboard() {
           variant={"outline"}
           className={cn(
             "w-[280px] justify-start text-left font-normal",
-            !date && "text-muted-foreground"
+            !movieDetails.date && "text-muted-foreground"
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>Pick a date</span>}
+          {movieDetails.date ? format(movieDetails.date, "PPP") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="flex w-auto flex-col space-y-2 p-2">
         <Select
           onValueChange={(value) =>
-            setDate(addDays(new Date(), parseInt(value)))
+            setMovieDetails((prevDetails)=>({
+              ...prevDetails,
+              date:addDays(new Date(),parseInt(value))
+            }))
           }
         >
           <SelectTrigger>
@@ -89,7 +130,12 @@ export default function Dashboard() {
           </SelectContent>
         </Select>
         <div className="rounded-md border">
-          <Calendar mode="single" selected={date} onSelect={setDate} />
+          <Calendar mode="single" selected={movieDetails.date instanceof Date ? movieDetails.date : undefined} onSelect={(selectedDate)=>
+            setMovieDetails((prevDetails)=>({
+              ...prevDetails,
+              date:selectedDate || "",
+            }))
+          } />
         </div>
       </PopoverContent>
     </Popover>
@@ -100,7 +146,7 @@ export default function Dashboard() {
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="outline">Cancel</Button>
-        <Button>Deploy</Button>
+        <Button onClick={handleDeploy}>Deploy</Button>
       </CardFooter>
     </Card>
     </div>
