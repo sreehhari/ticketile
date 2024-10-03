@@ -31,7 +31,6 @@ import {
 
 export default function Dashboard() {
     const [date, setDate] = useState<Date>()
-function page() {
   return (
     <>
     <div className="min-h-screen flex flex-col items-center justify-center">
@@ -108,6 +107,6 @@ function page() {
 
     </>
 )
-}
+
 }
 
