@@ -34,7 +34,7 @@ export default function Dashboard() {
     name:string;
     date: Date | string;
   }
-  const[error,setError]=useState<String | null>(null);
+  const[error,setError]=useState<string | null>(null);
 
     // const [date, setDate] = useState<Date>();
     // const [movie,setMovie] = useState("");
@@ -49,6 +49,15 @@ export default function Dashboard() {
       e.preventDefault();
       setError(null);
 
+      if(!movieDetails.name.trim()){
+        setError("movie name is required");
+        return;
+      }
+      if(!movieDetails.date){
+        setError("date not set");
+        return;
+      }
+
       try{
         const response = await fetch("/api/dashboard",{
           method:"POST",
@@ -56,7 +65,7 @@ export default function Dashboard() {
             "Content-type":"application/json",
 
           },
-          body:JSON.stringify(setMovieDetails)
+          body:JSON.stringify(movieDetails)
         });
         const result = await response.json();
         if(response.ok){
@@ -77,7 +86,7 @@ export default function Dashboard() {
         {/* <CardDescription></CardDescription> */}
       </CardHeader>
       <CardContent>
-        <form>
+        <form onSubmit={handleDeploy}>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="movieDetails">Name</Label>
@@ -141,12 +150,22 @@ export default function Dashboard() {
     </Popover>
 
             </div>
+            {error && (
+                <div className="text-red-500 text-sm">
+                  {error}
+                </div>
+              )}
           </div>
         </form>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button onClick={handleDeploy}>Deploy</Button>
+        {/* <Button variant="outline" onClick={()=>{
+          setMovieDetails({
+            name:"",
+            date:null
+          })||setError(null)
+        }}>Cancel</Button> */}
+        <Button type="submit" onClick={handleDeploy}>Deploy</Button>
       </CardFooter>
     </Card>
     </div>
