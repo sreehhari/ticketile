@@ -20,6 +20,7 @@ import {
   import { addDays, format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react";
 import { useActionState, useState } from "react"
+import { useSession } from "next-auth/react"
  
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
@@ -28,22 +29,40 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { SelectGroup, SelectLabel, Value } from "@radix-ui/react-select"
 
 export default function Dashboard() {
   interface MovieDetails{
     name:string;
-    date: Date | string;
+    date: Date | null;
+    description:string  | undefined;
+    showtime:string | null;
+    posterUrl:string | undefined;
+    ownerId:number | undefined;
+
   }
   const[error,setError]=useState<string | null>(null);
+  const {data:session,status}=useSession();
+  
+
 
     // const [date, setDate] = useState<Date>();
     // const [movie,setMovie] = useState("");
     const [movieDetails,setMovieDetails]=useState<MovieDetails>({
       name:"",
-      date:""
+      date:null,
+      description:undefined,
+      showtime:null,
+      posterUrl:undefined,
+      ownerId:session?.user?.id,
+
     })
     const handleinputchange =(e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>{
       setMovieDetails({...movieDetails,[e.target.name]:e.target.value,})
+
+      console.log({
+        ...movieDetails,
+      });
   };
     const handleDeploy=async(e:React.FormEvent)=>{
       e.preventDefault();
@@ -74,6 +93,7 @@ export default function Dashboard() {
           setError(result.error || 'adding movie failed')
         }
       }catch(err){
+        console.error("this is the error :",err)
         setError("an error has occurred while tryna add movie")
       }
     }
@@ -92,6 +112,14 @@ export default function Dashboard() {
               <Label htmlFor="movieDetails">Name</Label>
               <Input name="name"  value={movieDetails.name} onChange={handleinputchange} placeholder="Name of the movie" />
               
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="movieDetails">Description</Label>
+              <Input name="description" value={movieDetails.description} onChange={handleinputchange} placeholder="Give a description" />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="movieDetails">Poster URL</Label>
+              <Input name="posterUrl" value={movieDetails.posterUrl} onChange={handleinputchange} placeholder="Paste the link" />
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="showtime">Showtime</Label>
@@ -142,12 +170,30 @@ export default function Dashboard() {
           <Calendar mode="single" selected={movieDetails.date instanceof Date ? movieDetails.date : undefined} onSelect={(selectedDate)=>
             setMovieDetails((prevDetails)=>({
               ...prevDetails,
-              date:selectedDate || "",
+              date:selectedDate || null,
             }))
           } />
         </div>
       </PopoverContent>
     </Popover>
+    <Select onValueChange={(value)=>
+      setMovieDetails((prevDetails)=>({
+        ...prevDetails,
+        showtime:value
+      }))
+    }>
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="select showtime"/>
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Showtime</SelectLabel>
+          <SelectItem value="morning">6:30am-9:30am</SelectItem>
+          <SelectItem value="noon">12:30pm-3:30pm</SelectItem>
+          <SelectItem value="night">9:30pm-12:30am</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
 
             </div>
             {error && (

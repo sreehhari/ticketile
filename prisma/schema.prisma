@@ -34,17 +34,15 @@ model Theater {
 }
 
 model Movie {
-  id           Int            @id @default(autoincrement())
-  title        String
-  // description String
-  showDate     DateTime
-  // showtime    DateTime
-  // posterUrl   String?
-  // theaters    MovieTheater[]
-  // bookings    Booking[]
-  status       MovieStatus    @default(ACTIVE)
-  MovieTheater MovieTheater[]
-  Booking      Booking[]
+  id          Int            @id @default(autoincrement())
+  title       String
+  description String
+  showDate    DateTime
+  showtime    String
+  posterUrl   String?
+  theaters    MovieTheater[]
+  bookings    Booking[]
+  status      MovieStatus    @default(ACTIVE)
 }
 
 model MovieTheater {
