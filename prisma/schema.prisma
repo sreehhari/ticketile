@@ -38,7 +38,7 @@ model Movie {
   title       String
   description String
   showDate    DateTime
-  showtime    DateTime
+  showtime    String
   posterUrl   String?
   theaters    MovieTheater[]
   bookings    Booking[]
