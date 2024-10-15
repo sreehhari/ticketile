@@ -1,3 +1,5 @@
+
+"use client"
 import { useEffect,useState } from "react"
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
@@ -15,6 +17,7 @@ interface Movie{
   title:string;
   posterUrl:string;
   description:string;
+  
 }
 interface MovieCardProps{
   title:string;
@@ -85,23 +88,36 @@ function StarIcon(props:React.SVGProps<SVGSVGElement>) {
 
 const MovieList:React.FC=()=>{
   const[movies,setMovies]=useState<Movie[]>([]);
+  const[error,setError]=useState<string | null>(null);
 
   useEffect(()=>{
     const fetchMovies = async()=>{
       try{
         const response = await fetch('/api/movies'); 
+        if(!response.ok){
+          throw new Error('failed to fetch movies');
+        }
         const data:Movie[] = await response.json();
-        setMovies(data);
+        // console.log(data)
+        //@ts-expect-error-data'stype
+        setMovies(data.data);
+        // console.log(movies)
       }catch(err){
         console.error("error fetching movies ",err);
+        setError('could not fetch movies');
       }
     }
     fetchMovies();
   },[]);
 
   return(
+
     <div className="w-full max-w-6xl mx-auto py-8">
-      <Swiper
+      {error ? (
+         <div className="text-red-500">{error}</div>
+      ):
+      (
+        <Swiper
         slidesPerView={3}
         spaceBetween={30}
         pagination={{ clickable: true }}
@@ -125,6 +141,8 @@ const MovieList:React.FC=()=>{
         <ChevronRightIcon className="w-8 h-8 text-white" />
         </div>
       </Swiper>
+      )}
+      
     </div>
   )
 

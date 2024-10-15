@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Cards from "@/components/carousel/carousel";
-import MovieList from "@/components/movieList/list";
+import MovieList from "@/components/carousel/carousel";
 export default function Home() {
   return (
     <>
