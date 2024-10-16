@@ -9,7 +9,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import './styles.css'; 
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel"
-
+import { useRouter } from "next/navigation";
 //ts shit
 
 interface Movie{
@@ -23,6 +23,7 @@ interface MovieCardProps{
   title:string;
   image:string;
   description:string;
+  id?:number;
   // cinema:Movie[];
 }
 //icons
@@ -147,9 +148,16 @@ const MovieList:React.FC=()=>{
   )
 
 }
-const MovieCard: React.FC<MovieCardProps> = ({ title, image, description })=>{
+const MovieCard: React.FC<MovieCardProps> = ({ title, image, description,id })=>{
+  const router = useRouter();
+  const handleClick =()=>{
+    router.push(`/movies/${id}`)
+  }
   return (
-    <div className="relative group cursor-pointer">
+    <div className="relative group cursor-pointer"
+    onClick={handleClick}
+
+    >
       <Image
         src={image}
         width={250}
