@@ -1,9 +1,26 @@
 "use client"
 
-import { AspectRatio } from "@radix-ui/react-aspect-ratio"
 import Image from "next/image"
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 // interface BookingProps{
 //     id:number;
@@ -51,29 +68,53 @@ const Movies = ({params}:{params:{id:string}}) => {
         </div>
     }
   return (
-    <div>
-        <div className="flex flex-row">
-        <div>
-            <Image
+    <div className="min-h-screen flex flex-row-reverse items-center justify-center">
+    <Card className="p-4 mt-[100px] w-[1600px] h-[900px] ">
+    <div className="w-1/2 p-4 flex items-center justify-center">
+    <Image
             src={details?.posterUrl ?? 'https://i.pinimg.com/564x/2d/8a/73/2d8a732b48087dd34f9500b8eb2f4240.jpg'}
             width={500}
             height={750}
             alt={details?.title ?? 'something went wrong'}
-            className="rounded-lg object-cover w-full h-[375px]"
+            className=" rounded-lg object-cover w-full h-[375px]"
             style={{ aspectRatio: "250/375", objectFit: "cover" }}
             />
-        </div>
-        <div>
-
-        </div>
-        <div>
-
-        </div>
-        </div>
-
-
-
-
+    </div>
+        <div className="w-1/2 p-4">
+      <CardHeader>
+        <CardTitle>{details?.title}</CardTitle>
+        <CardDescription>{details?.description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form>
+          <div className="grid w-full items-center gap-4">
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" placeholder="Name of your project" />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="framework">Framework</Label>
+              <Select>
+                <SelectTrigger id="framework">
+                  <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent position="popper">
+                  <SelectItem value="next">Next.js</SelectItem>
+                  <SelectItem value="sveltekit">SvelteKit</SelectItem>
+                  <SelectItem value="astro">Astro</SelectItem>
+                  <SelectItem value="nuxt">Nuxt.js</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </form>
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <Button variant="outline">Cancel</Button>
+        <Button>Deploy</Button>
+      </CardFooter>
+      </div>
+    </Card>
     </div>
   )
 }
