@@ -129,6 +129,7 @@ const MovieList:React.FC=()=>{
         {movies.map((movie)=>(
           <SwiperSlide key={movie.id}>
             <MovieCard
+            id={movie.id}
             title={movie.title}
             image={movie.posterUrl}
             description={movie.description}

@@ -17,9 +17,8 @@ interface Details{
     
   }
 
-const Movies = () => {
-    // const router = useRouter();
-    const{id} = useRouter().query; //this extracts the id from the url
+const Movies = ({params}:{params:{id:string}}) => {
+    const{id}=params;
     const[details,setDetails]=useState<Details | null>(null)
     const[error,setError]=useState<string | null>(null);
     useEffect(()=>{
@@ -55,21 +54,23 @@ const Movies = () => {
     <div>
         <div className="flex flex-row">
         <div>
-            <AspectRatio ratio={9/16} className="bg-muted">
             <Image
-            src={details?.image ?? 'https://i.pinimg.com/564x/2d/8a/73/2d8a732b48087dd34f9500b8eb2f4240.jpg'}
+            src={details?.posterUrl ?? 'https://i.pinimg.com/564x/2d/8a/73/2d8a732b48087dd34f9500b8eb2f4240.jpg'}
             width={500}
             height={750}
             alt={details?.title ?? 'something went wrong'}
             className="rounded-lg object-cover w-full h-[375px]"
             style={{ aspectRatio: "250/375", objectFit: "cover" }}
             />
-            </AspectRatio>
+        </div>
+        <div>
+
         </div>
         <div>
 
         </div>
         </div>
+
 
 
 
