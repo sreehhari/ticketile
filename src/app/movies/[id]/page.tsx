@@ -68,19 +68,23 @@ const Movies = ({params}:{params:{id:string}}) => {
         </div>
     }
   return (
-    <div className="min-h-screen flex flex-row-reverse items-center justify-center">
-    <Card className="p-4 mt-[100px] w-[1600px] h-[900px] ">
+<div className="min-h-screen flex flex-row-reverse items-center justify-center">
+  <div></div>
+  <Card className="p-4 mt-[100px] w-[1600px] h-[900px] flex">
+    {/* Left Side: Image */}
     <div className="w-1/2 p-4 flex items-center justify-center">
-    <Image
-            src={details?.posterUrl ?? 'https://i.pinimg.com/564x/2d/8a/73/2d8a732b48087dd34f9500b8eb2f4240.jpg'}
-            width={500}
-            height={750}
-            alt={details?.title ?? 'something went wrong'}
-            className=" rounded-lg object-cover w-full h-[375px]"
-            style={{ aspectRatio: "250/375", objectFit: "cover" }}
-            />
+      <Image
+        src={details?.posterUrl ?? 'https://i.pinimg.com/564x/2d/8a/73/2d8a732b48087dd34f9500b8eb2f4240.jpg'}
+        width={500}
+        height={750}
+        alt={details?.title ?? 'something went wrong'}
+        className="rounded-lg object-cover"
+        style={{ aspectRatio: "250/375", objectFit: "cover" }}
+      />
     </div>
-        <div className="w-1/2 p-4">
+
+    {/* Right Side: Form */}
+    <div className="w-1/2 p-4">
       <CardHeader>
         <CardTitle>{details?.title}</CardTitle>
         <CardDescription>{details?.description}</CardDescription>
@@ -113,9 +117,10 @@ const Movies = ({params}:{params:{id:string}}) => {
         <Button variant="outline">Cancel</Button>
         <Button>Deploy</Button>
       </CardFooter>
-      </div>
-    </Card>
     </div>
+  </Card>
+</div>
+
   )
 }
 

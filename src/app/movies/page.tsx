@@ -112,8 +112,8 @@ const MovieList:React.FC=()=>{
   },[]);
 
   return(
-
-    <div className="w-full max-w-6xl mx-auto py-8">
+    
+    <div className="mt-[250px] w-full max-w-6xl mx-auto py-8 flex items-center justify-center">
       {error ? (
          <div className="text-red-500">{error}</div>
       ):
@@ -143,9 +143,10 @@ const MovieList:React.FC=()=>{
         <ChevronRightIcon className="w-8 h-8 text-white" />
         </div>
       </Swiper>
-      )}
       
-    </div>
+      )}
+      </div>
+      
   )
 
 }
