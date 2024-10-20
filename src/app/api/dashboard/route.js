@@ -1,9 +1,11 @@
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import {prisma} from "@/lib/prisma"
+
 // import { Session } from "inspector";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-    const prisma = new PrismaClient();
+    // const prisma = new PrismaClient();
 
 
     try{

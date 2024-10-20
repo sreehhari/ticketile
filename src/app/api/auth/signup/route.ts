@@ -1,9 +1,11 @@
-import { PrismaClient } from "@prisma/client";
+import {prisma} from "@/lib/prisma"
+// import { PrismaClient } from "@prisma/client";
+
 import bcrypt from "bcryptjs";
 import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 export async function POST(req:NextRequest) {
     const {email, password, role, theaterName,name,location}=await req.json();

@@ -1,11 +1,13 @@
 import  CredentialsProvider  from "next-auth/providers/credentials";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import {prisma} from "@/lib/prisma"
+
 // import { cookies } from "next/headers";
 // import { Providers } from "../providers";
 import bcrypt from "bcryptjs";
 
-const prisma = new PrismaClient();
-
+// const prisma = new PrismaClient();
+// 
 
 export const NEXT_AUTH_CONFIG = {
     providers:[

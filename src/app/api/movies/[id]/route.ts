@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import {prisma} from "@/lib/prisma"
 
 export async function GET(request:Request,{params}:{params:{id:string}}){
-    const prisma = new PrismaClient();
+    // const prisma = new PrismaClient();
     const movieId = parseInt(params.id);
 
 try{
@@ -11,10 +12,43 @@ try{
             id:movieId
         },
     });
+
+    if (!movie) {
+        return NextResponse.json({
+          message: "Movie not found",
+        }, {
+          status: 404,
+        });
+      }
+    const movieTitle = movie?.title;
+
+    const theaters = await prisma.theater.findMany({
+        where:{
+            movies:{
+                some:{
+                    movie:{
+                        title:movieTitle,
+                    },
+                },
+            },
+        },
+        include:{
+            movies:{
+                include:{
+                    movie:true,
+                    
+                    
+                },
+            },
+        },
+    });
     console.log(movie);
     return NextResponse.json({
         message:"fetched movie details successfully",
-        data:movie
+        data:{
+            movie,
+            theaters,
+        }
     },{
         status:200
     })

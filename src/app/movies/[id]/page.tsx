@@ -31,12 +31,21 @@ interface Details{
     posterUrl:string;
     description:string;
     image:string;
+    name:string;
     
   }
 
+
+
+interface movieTheaters{
+  name:string;
+}
+
 const Movies = ({params}:{params:{id:string}}) => {
     const{id}=params;
-    const[details,setDetails]=useState<Details | null>(null)
+    const[details,setDetails]=useState<Details | null>(null);
+    const[theaters,setTheaters]=useState<movieTheaters[]>([]);
+
     const[error,setError]=useState<string | null>(null);
     useEffect(()=>{
         const getDetails = async()=>{
@@ -47,16 +56,22 @@ const Movies = ({params}:{params:{id:string}}) => {
                 }
                 const data:Details = await response.json();
                 //@ts-expect-error-data'stype
-                setDetails(data.data);
+                setDetails(data.data.movie);
+                 //@ts-expect-error-data'stype
+                setTheaters(data.data.theaters);
+                // console.log("these are the theaters:",theaters)
+
             }catch(err){
                 console.error("error fetching the movie's details",err);
                 setError('not able to fetch the details');
             }
         }
-        // getDetails();
+      
         if(id){
             getDetails();
         }
+
+
     },[id]);
     if (error) {
         return <div className="text-red-500">{error}</div>;
@@ -92,14 +107,43 @@ const Movies = ({params}:{params:{id:string}}) => {
       <CardContent>
         <form>
           <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
+            {/* <div className="flex flex-col space-y-1.5">
               <Label htmlFor="name">Name</Label>
               <Input id="name" placeholder="Name of your project" />
+            </div> */}
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="framework">Theater</Label>
+              <Select>
+                <SelectTrigger id="theater">
+                  <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent position="popper">
+                  {/* <SelectItem value="next">Next.js</SelectItem>
+                  <SelectItem value="sveltekit">SvelteKit</SelectItem>
+                  <SelectItem value="astro">Astro</SelectItem>
+                  <SelectItem value="nuxt">Nuxt.js</SelectItem> */}
+                  {/* {
+                    theaters.map((theater)=>(
+                      <SelectItem 
+                      value={theater.theaterName}
+                      key={theater.theaterName}
+                      >{theater.theaterName}</SelectItem>
+                    ))
+                  } */}
+                  {
+                    theaters.map((theater)=>(
+                      <SelectItem
+                      value={theater.name}
+                      key={theater.name}>{theater.name}</SelectItem>
+                    ))
+                  }
+                </SelectContent>
+              </Select>
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="framework">Framework</Label>
+              <Label htmlFor="framework">Seats</Label>
               <Select>
-                <SelectTrigger id="framework">
+                <SelectTrigger id="theater">
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent position="popper">
@@ -110,12 +154,27 @@ const Movies = ({params}:{params:{id:string}}) => {
                 </SelectContent>
               </Select>
             </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="framework">Show Time</Label>
+              <Select>
+                <SelectTrigger id="theater">
+                  <SelectValue placeholder="Select" />
+                </SelectTrigger>
+                <SelectContent position="popper">
+                  <SelectItem value="next">Next.js</SelectItem>
+                  <SelectItem value="sveltekit">SvelteKit</SelectItem>
+                  <SelectItem value="astro">Astro</SelectItem>
+                  <SelectItem value="nuxt">Nuxt.js</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+          
           </div>
         </form>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button>Deploy</Button>
+        <Button>Book</Button>
       </CardFooter>
     </div>
   </Card>
