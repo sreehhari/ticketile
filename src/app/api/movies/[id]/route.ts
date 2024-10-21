@@ -42,14 +42,7 @@ try{
             },
         },
     });
-        // console.log('theaters are:',theaters);
-
-    // const timings = await prisma.movieTheater.findFirst({
-    //     where:{
-    //         movieId:movieId,
-    //         theaterId:
-    //     }
-    // })
+       
     return NextResponse.json({
         message:"fetched movie details successfully",
         data:{

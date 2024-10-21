@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import Seat from "@/components/seat/seat"
 
 interface Details {
   id: number
@@ -194,6 +195,7 @@ export default function Movies({ params }: { params: { id: string } }) {
   if (!details) {
     return <div><h3>Please wait</h3></div>
   }
+  const moviename = details.title;
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
@@ -251,10 +253,11 @@ export default function Movies({ params }: { params: { id: string } }) {
       </Card>
       {booking && selectedTheaterId && (
         <div className="mt-8 w-full max-w-4xl">
-          <SeatBooking
-            movieId={id}
-            theaterId={selectedTheaterId}
-            email={email}
+          <Seat
+              movieId={id}
+              theaterId={selectedTheaterId}
+              email={email}
+              movieName={moviename}
           />
         </div>
       )}

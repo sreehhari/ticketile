@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-
-const SeatBooking = ({ movieId, theaterId, email }) => {
+import jsPDF from "jspdf";
+const Seat = ({ movieId, theaterId, email,movieName }) => {
   const [bookedSeats, setBookedSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,6 +38,19 @@ const SeatBooking = ({ movieId, theaterId, email }) => {
     }
   };
 
+  const generatePDF =()=>{
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text("ticketille",20,20);
+
+    doc.setFontSize(12);
+    doc.text(`Movie: ${movieName}`, 20, 30);
+    // doc.text(`Theater ID : ${theaterId} `)
+    doc.text(`Booked Seats: ${selectedSeats.join(", ")}`, 20, 40);
+    doc.text(`User: ${email}`, 20, 50);
+    doc.save("ticket.pdf"); // Download the PDF file
+  }
+
   const handleBookingSubmit = async () => {
     try {
       const response = await fetch(`/api/book-seats`, {
@@ -53,11 +66,13 @@ const SeatBooking = ({ movieId, theaterId, email }) => {
         }),
       });
   
-      const data = await response.json(); // Ensure we parse the response as JSON
+      const data = await response.json(); 
   
       if (response.ok) {
         alert(data.message || "Booking successful!");
-        setSelectedSeats([]); // Clear selected seats after booking
+        generatePDF();
+        setSelectedSeats([]); 
+
       } else {
         console.error("Failed to book seats:", data.message);
         alert(data.message || "Failed to book seats");
@@ -74,12 +89,14 @@ const SeatBooking = ({ movieId, theaterId, email }) => {
 
     return (
       <div
-        key={seatId}
-        className={`w-10 h-10 flex items-center justify-center border rounded cursor-pointer transition-colors duration-300 
-          ${isBooked ? 'bg-red-600 text-white cursor-not-allowed' : isSelected ? 'bg-green-600 text-white' : 'bg-white'}`}
-        onClick={() => handleSeatClick(seatId)}
-        style={{ cursor: isBooked ? 'not-allowed' : 'pointer' }} // Change cursor based on booking status
-      >
+      key={seatId}
+      className={`w-10 h-10 flex items-center justify-center border rounded cursor-pointer transition-colors duration-300 
+        ${isBooked ? 'bg-red-600 text-white cursor-not-allowed' : 
+        isSelected ? 'bg-green-600 text-white' : 
+        'bg-gray-200 text-black border-gray-400 hover:bg-gray-300'}`} // Light mode friendly
+      onClick={() => handleSeatClick(seatId)}
+      style={{ cursor: isBooked ? 'not-allowed' : 'pointer' }} 
+    >
         {seatId}
       </div>
     );
@@ -94,7 +111,7 @@ const SeatBooking = ({ movieId, theaterId, email }) => {
 
   return (
     <div className="p-4">
-      <h2 className="text-lg font-semibold mb-4">Select Seats</h2>
+      <h2 className="text-lg font-semibold mb-4 ">Select Seats(Screen this way)</h2>
       <div className="grid grid-cols-10 gap-2 mb-4">
         {seatLayout.map((seatId) => renderSeat(seatId))}
       </div>
@@ -109,4 +126,4 @@ const SeatBooking = ({ movieId, theaterId, email }) => {
   );
 };
 
-export default SeatBooking;
+export default Seat;

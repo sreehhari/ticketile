@@ -45,7 +45,7 @@ export async function POST(req) {
 
     // Book the selected seats
     const bookings = seats.map((seatId) => ({
-      userId: user.id, // Using the user ID from the found user
+      userId: user.id, 
       movieId: parseInt(movieId),
       theaterId: parseInt(theaterId),
       seatId: seatId,
