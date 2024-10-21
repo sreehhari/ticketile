@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const SeatBooking = ({ movieId, theaterId,email }) => {
+const SeatBooking = ({ movieId, theaterId, email }) => {
   const [bookedSeats, setBookedSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,10 +15,10 @@ const SeatBooking = ({ movieId, theaterId,email }) => {
         } else {
           console.error("Failed to fetch booked seats:", data.message);
         }
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching booked seats:", error);
-        setLoading(false);
+      } finally {
+        setLoading(false); // Always set loading to false in finally
       }
     };
 
@@ -27,7 +27,7 @@ const SeatBooking = ({ movieId, theaterId,email }) => {
 
   const handleSeatClick = (seatId) => {
     if (bookedSeats.includes(seatId)) {
-      return; // Prevent selecting already booked seats
+      return; 
     }
 
     // Toggle seat selection
@@ -38,31 +38,6 @@ const SeatBooking = ({ movieId, theaterId,email }) => {
     }
   };
 
-  // const handleBookingSubmit = async () => {
-  //   try {
-  //     const response = await fetch(`/api/book-seats`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         movieId,
-  //         theaterId,
-  //         seats: selectedSeats,
-  //       }),
-  //     });
-
-  //     const data = await response.json();
-  //     if (response.ok) {
-  //       alert("Booking successful!");
-  //       setSelectedSeats([]); // Clear selected seats after booking
-  //     } else {
-  //       console.error("Failed to book seats:", data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error booking seats:", error);
-  //   }
-  // };
   const handleBookingSubmit = async () => {
     try {
       const response = await fetch(`/api/book-seats`, {
@@ -74,12 +49,11 @@ const SeatBooking = ({ movieId, theaterId,email }) => {
           movieId,
           theaterId,
           seats: selectedSeats,
-          email,  // Ensure userId is passed correctly
+          email,  
         }),
       });
   
-      // Check for successful response
-      const data = await response.json();  // Ensure we parse the response as JSON
+      const data = await response.json(); // Ensure we parse the response as JSON
   
       if (response.ok) {
         alert(data.message || "Booking successful!");
@@ -101,8 +75,10 @@ const SeatBooking = ({ movieId, theaterId,email }) => {
     return (
       <div
         key={seatId}
-        className={`seat ${isBooked ? "booked" : isSelected ? "selected" : ""}`}
+        className={`w-10 h-10 flex items-center justify-center border rounded cursor-pointer transition-colors duration-300 
+          ${isBooked ? 'bg-red-600 text-white cursor-not-allowed' : isSelected ? 'bg-green-600 text-white' : 'bg-white'}`}
         onClick={() => handleSeatClick(seatId)}
+        style={{ cursor: isBooked ? 'not-allowed' : 'pointer' }} // Change cursor based on booking status
       >
         {seatId}
       </div>
@@ -117,48 +93,18 @@ const SeatBooking = ({ movieId, theaterId,email }) => {
   const seatLayout = Array.from({ length: 90 }, (_, index) => index + 1);
 
   return (
-    <div>
-      <h2>Select Seats</h2>
-      <div className="seat-layout">
+    <div className="p-4">
+      <h2 className="text-lg font-semibold mb-4">Select Seats</h2>
+      <div className="grid grid-cols-10 gap-2 mb-4">
         {seatLayout.map((seatId) => renderSeat(seatId))}
       </div>
-      <button onClick={handleBookingSubmit} disabled={selectedSeats.length === 0}>
+      <button
+        onClick={handleBookingSubmit}
+        disabled={selectedSeats.length === 0}
+        className={`px-4 py-2 text-white rounded ${selectedSeats.length > 0 ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}`}
+      >
         Book {selectedSeats.length} {selectedSeats.length === 1 ? "Seat" : "Seats"}
       </button>
-
-      {/* Some basic CSS to help visualize the seats */}
-      <style jsx>{`
-        .seat-layout {
-        
-          display: grid;
-          grid-template-columns: repeat(10, 40px);
-          gap: 10px;
-          margin: 20px 0;
-        }
-
-        .seat {
-          width: 40px;
-          height: 40px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          cursor: pointer;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          background-color: #fff;
-        }
-
-        .seat.booked {
-          background-color: red;
-          color: #fff;
-          cursor: not-allowed;
-        }
-
-        .seat.selected {
-          background-color: green;
-          color: #fff;
-        }
-      `}</style>
     </div>
   );
 };
