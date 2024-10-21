@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button"
 import {
@@ -12,6 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -21,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import SeatSelection from "@/components/seat/seat";
 // import { threadId } from "worker_threads";
 
 // interface BookingProps{
@@ -44,12 +47,21 @@ interface movieTheaters{
 }
 
 const Movies = ({params}:{params:{id:string}}) => {
+  // const router = useRouter();
+
     const{id}=params;
+    const {data:session,status}=useSession();
+    const [email,setEmail]=useState<string>("")
+
+
+    const[booking,setBooking]=useState(false);
     const[details,setDetails]=useState<Details | null>(null);
     const[theaters,setTheaters]=useState<movieTheaters[]>([]);
-    const[theaterId,setTheaterId]=useState<number | null>(null)
+    // const[theaterId,setTheaterId]=useState<number | null>(null)
     const[error,setError]=useState<string | null>(null);
     const[showTimes,setShowTimes]=useState<string[]>([]);
+    // const bookId=parseInt(id);
+    const theaterId=theaters.length>0 ? theaters[0].id : null;
     useEffect(()=>{
         const getDetails = async()=>{
             try{
@@ -63,6 +75,10 @@ const Movies = ({params}:{params:{id:string}}) => {
                  //@ts-expect-error-data'stype
                 setTheaters(data.data.theaters);
                 // console.log("these are the theaters:",theaters)
+                if(status === "authenticated"){
+                  setEmail(session.user?.email ?? "");
+          
+              }
 
             }catch(err){
                 console.error("error fetching the movie's details",err);
@@ -75,7 +91,7 @@ const Movies = ({params}:{params:{id:string}}) => {
         }
 
 
-    },[id]);
+    },[id,status,session?.user?.email]);
    
 
     // const handleTheaterChange=async(value:string)=>{
@@ -110,6 +126,9 @@ const Movies = ({params}:{params:{id:string}}) => {
       <div>
           <h3>please wait</h3>
       </div>
+  }
+  const handleClick=()=>{
+    setBooking(true)
   }
   return (
 <div className="min-h-screen flex flex-row-reverse items-center justify-center">
@@ -179,10 +198,27 @@ const Movies = ({params}:{params:{id:string}}) => {
         </form>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button>Book</Button>
+        <Button 
+        onClick={
+          handleClick
+        }
+        >Book</Button>
       </CardFooter>
     </div>
   </Card>
+  <div>
+{
+  booking &&  (
+    
+    
+    <SeatSelection
+      movieId={id}
+      theaterId={theaterId}
+      email={email}
+    />)
+
+}
+</div>
 </div>
 
   )
