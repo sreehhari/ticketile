@@ -51,6 +51,7 @@ export const NEXT_AUTH_CONFIG = {
             //here we persist the role of the user using jwt tokens
             if(user){
                 token.role=user.role;
+                // token.email=user.email;
             }
             return token;
         },
@@ -58,6 +59,7 @@ export const NEXT_AUTH_CONFIG = {
             //here we assign the role from the token to the session object
             if(token?.role){
                 session.user.role=token.role;
+                session.user.email=token.email;
             }
             return session;
         }

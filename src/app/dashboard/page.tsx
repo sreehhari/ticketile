@@ -38,7 +38,7 @@ export default function Dashboard() {
     description:string  | undefined;
     showtime:string | null;
     posterUrl:string | undefined;
-    ownerId:number | undefined;
+    ownerEmail:string | undefined |null;
 
   }
   const[error,setError]=useState<string | null>(null);
@@ -54,7 +54,7 @@ export default function Dashboard() {
       description:undefined,
       showtime:null,
       posterUrl:undefined,
-      ownerId:session?.user?.id,
+      ownerEmail:session?.user?.email,
 
     })
     const handleinputchange =(e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)=>{
@@ -76,6 +76,10 @@ export default function Dashboard() {
         setError("date not set");
         return;
       }
+      const movieData = {
+        ...movieDetails,
+        ownerEmail: session?.user?.email, // Dynamically assigning ownerId
+      };
 
       try{
         const response = await fetch("/api/dashboard",{
@@ -84,7 +88,7 @@ export default function Dashboard() {
             "Content-type":"application/json",
 
           },
-          body:JSON.stringify(movieDetails)
+          body:JSON.stringify(movieData)
         });
         const result = await response.json();
         if(response.ok){
@@ -100,6 +104,14 @@ export default function Dashboard() {
   return (
     <>
     <div className="min-h-screen flex flex-col items-center justify-center">
+      <div>
+        <h1>
+       {
+        session?.user.email
+       }
+        </h1>
+      </div>
+    
     <Card className="w-[350px]">
       <CardHeader>
         <CardTitle>Add Movie</CardTitle>
@@ -220,4 +232,3 @@ export default function Dashboard() {
 )
 
 }
-

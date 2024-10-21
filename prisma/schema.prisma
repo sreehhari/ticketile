@@ -24,13 +24,14 @@ model User {
 }
 
 model Theater {
-  id       Int            @id @default(autoincrement())
-  name     String
-  location String
-  ownerId  Int
-  owner    User           @relation(fields: [ownerId], references: [id])
-  movies   MovieTheater[]
-  seats    Int            @default(90)
+  id         Int            @id @default(autoincrement())
+  name       String
+  location   String
+  ownerEmail String
+  owner      User           @relation(fields: [ownerEmail], references: [email])
+  movies     MovieTheater[]
+  seats      Int            @default(90)
+  Booking    Booking[]
 }
 
 model Movie {
@@ -38,7 +39,7 @@ model Movie {
   title       String
   description String
   showDate    DateTime
-  showtime    String
+  // showtime    String
   posterUrl   String?
   theaters    MovieTheater[]
   bookings    Booking[]
@@ -51,7 +52,7 @@ model MovieTheater {
   movieId   Int
   theater   Theater @relation(fields: [theaterId], references: [id])
   theaterId Int
-  showTimes String //store showtimes in a format like json vro
+  // showTimes String //store showtimes in a format like json vro
 }
 
 model Booking {
@@ -60,6 +61,9 @@ model Booking {
   userId    Int
   movie     Movie    @relation(fields: [movieId], references: [id])
   movieId   Int
+  theater   Theater  @relation(fields: [theaterId], references: [id])
+  theaterId Int
+  seatId    Int // Add this field to track which seat is booked
   bookedAt  DateTime @default(now())
   cancelled Boolean  @default(false)
 }

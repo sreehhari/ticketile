@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+// import { threadId } from "worker_threads";
 
 // interface BookingProps{
 //     id:number;
@@ -39,14 +40,16 @@ interface Details{
 
 interface movieTheaters{
   name:string;
+  id:string;
 }
 
 const Movies = ({params}:{params:{id:string}}) => {
     const{id}=params;
     const[details,setDetails]=useState<Details | null>(null);
     const[theaters,setTheaters]=useState<movieTheaters[]>([]);
-
+    const[theaterId,setTheaterId]=useState<number | null>(null)
     const[error,setError]=useState<string | null>(null);
+    const[showTimes,setShowTimes]=useState<string[]>([]);
     useEffect(()=>{
         const getDetails = async()=>{
             try{
@@ -73,15 +76,41 @@ const Movies = ({params}:{params:{id:string}}) => {
 
 
     },[id]);
-    if (error) {
-        return <div className="text-red-500">{error}</div>;
-    }
+   
 
-    if(!details){
-        <div>
-            <h3>please wait</h3>
-        </div>
-    }
+    // const handleTheaterChange=async(value:string)=>{
+    //   const selectedTheaterId = parseInt(value);
+    //   console.log("this is the theater id :",selectedTheaterId)
+    //   setTheaterId(selectedTheaterId);
+    //   if(selectedTheaterId){
+    //     try{
+    //       const response = await fetch(`/api/fetchTimings?movieId=${id}&theaterId=${selectedTheaterId}`)
+    //       if (!response.ok) {
+    //         throw new Error("Failed to fetch showtimes");
+    //       }
+    //       const data = await response.json();
+    //       setShowTimes(data.showTimes);
+
+    //       console.log("these are the showtimes:",showTimes);
+
+    //     }catch(err){
+    //       console.error("Error fetching showtimes:", err);
+    //       setError("Could not fetch showtimes");
+    //     }
+    //   }else{
+    //     setError("Please select a theater");
+    //   }
+     
+    // };
+    if (error) {
+      return <div className="text-red-500">{error}</div>;
+  }
+
+  if(!details){
+      <div>
+          <h3>please wait</h3>
+      </div>
+  }
   return (
 <div className="min-h-screen flex flex-row-reverse items-center justify-center">
   <div></div>
@@ -118,56 +147,32 @@ const Movies = ({params}:{params:{id:string}}) => {
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent position="popper">
-                  {/* <SelectItem value="next">Next.js</SelectItem>
-                  <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                  <SelectItem value="astro">Astro</SelectItem>
-                  <SelectItem value="nuxt">Nuxt.js</SelectItem> */}
-                  {/* {
-                    theaters.map((theater)=>(
-                      <SelectItem 
-                      value={theater.theaterName}
-                      key={theater.theaterName}
-                      >{theater.theaterName}</SelectItem>
-                    ))
-                  } */}
+                  
                   {
                     theaters.map((theater)=>(
                       <SelectItem
-                      value={theater.name}
-                      key={theater.name}>{theater.name}</SelectItem>
+                      value={theater.id.toString()}
+                      key={theater.id}>{theater.name}</SelectItem>
                     ))
                   }
                 </SelectContent>
               </Select>
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="framework">Seats</Label>
+              <Label htmlFor="seats">Seats</Label>
               <Select>
-                <SelectTrigger id="theater">
+                <SelectTrigger id="seats">
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent position="popper">
-                  <SelectItem value="next">Next.js</SelectItem>
-                  <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                  <SelectItem value="astro">Astro</SelectItem>
-                  <SelectItem value="nuxt">Nuxt.js</SelectItem>
+                  <SelectItem value="1">Sigma</SelectItem>
+                  <SelectItem value="2">Couple</SelectItem>
+                  <SelectItem value="3">Fam</SelectItem>
+                  <SelectItem value="4">4 people</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="framework">Show Time</Label>
-              <Select>
-                <SelectTrigger id="theater">
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  <SelectItem value="next">Next.js</SelectItem>
-                  <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                  <SelectItem value="astro">Astro</SelectItem>
-                  <SelectItem value="nuxt">Nuxt.js</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            
             
           
           </div>
