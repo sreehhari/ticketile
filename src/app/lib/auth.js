@@ -1,11 +1,13 @@
 import  CredentialsProvider  from "next-auth/providers/credentials";
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
+import {prisma} from "@/lib/prisma"
+
 // import { cookies } from "next/headers";
 // import { Providers } from "../providers";
 import bcrypt from "bcryptjs";
 
-const prisma = new PrismaClient();
-
+// const prisma = new PrismaClient();
+// 
 
 export const NEXT_AUTH_CONFIG = {
     providers:[
@@ -49,6 +51,7 @@ export const NEXT_AUTH_CONFIG = {
             //here we persist the role of the user using jwt tokens
             if(user){
                 token.role=user.role;
+                // token.email=user.email;
             }
             return token;
         },
@@ -56,6 +59,7 @@ export const NEXT_AUTH_CONFIG = {
             //here we assign the role from the token to the session object
             if(token?.role){
                 session.user.role=token.role;
+                session.user.email=token.email;
             }
             return session;
         }
