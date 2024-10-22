@@ -9,7 +9,9 @@ import { Button } from "@/components/ui/button"
 import UserLogo from "../avatar/UserLogo"
 // import SignUp from "../signupButton/signup"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { cn } from "@/lib/utils"
+import { useEffect } from "react"
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -68,6 +70,7 @@ export default function Navbar() {
   const router = useRouter();
   const {data:session} = useSession();
   const isOwner = session?.user?.role === "THEATER_OWNER";
+  
   return (
     <div className="fixed top-10 inset-x-0  max-w-screen-xl mx-auto z-50 ">
       <div className="flex justify-between items-center">
@@ -131,6 +134,7 @@ export default function Navbar() {
     <div className="">
        <UserLogo/>
         </div>
+        
       <div>
       {/* <button onClick={()=>signIn()}>SignIn</button> */}
       <button onClick={()=>router.push('/signUp')}>Sign Up</button>

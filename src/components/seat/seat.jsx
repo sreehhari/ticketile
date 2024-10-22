@@ -4,6 +4,7 @@ const Seat = ({ movieId, theaterId, email,movieName }) => {
   const [bookedSeats, setBookedSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [loading, setLoading] = useState(true);
+  // const[seatCount,setSeatCount]=useState(0);
 
   useEffect(() => {
     const fetchBookedSeats = async () => {
@@ -33,6 +34,7 @@ const Seat = ({ movieId, theaterId, email,movieName }) => {
     // Toggle seat selection
     if (selectedSeats.includes(seatId)) {
       setSelectedSeats(selectedSeats.filter((seat) => seat !== seatId));
+      // setSeatCount(selectedSeats.length)
     } else {
       setSelectedSeats([...selectedSeats, seatId]);
     }
@@ -40,6 +42,7 @@ const Seat = ({ movieId, theaterId, email,movieName }) => {
 
   const generatePDF =()=>{
     const doc = new jsPDF();
+    const fare = selectedSeats.length*150;
     doc.setFontSize(16);
     doc.text("ticketille",20,20);
 
@@ -48,6 +51,7 @@ const Seat = ({ movieId, theaterId, email,movieName }) => {
     // doc.text(`Theater ID : ${theaterId} `)
     doc.text(`Booked Seats: ${selectedSeats.join(", ")}`, 20, 40);
     doc.text(`User: ${email}`, 20, 50);
+    doc.text(`Total: Rs${fare}`,20,60)
     doc.save("ticket.pdf"); // Download the PDF file
   }
 
@@ -112,6 +116,7 @@ const Seat = ({ movieId, theaterId, email,movieName }) => {
   return (
     <div className="p-4">
       <h2 className="text-lg font-semibold mb-4 ">Select Seats(Screen this way)</h2>
+      <h3 className="p-2">₹150/- per seat</h3>
       <div className="grid grid-cols-10 gap-2 mb-4">
         {seatLayout.map((seatId) => renderSeat(seatId))}
       </div>
